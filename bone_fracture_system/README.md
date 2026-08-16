@@ -95,5 +95,17 @@ bone_fracture_system/
 │   └── train_ensembles.py
 ├── templates/
 ├── static/
+├── docs/Bone_Fracture_Detection_Presentation.pptx
 └── Fracture_Detection_Colab.ipynb
 ```
+
+## Project presentation
+
+A 14-slide academic deck (title through conclusion) is at [`docs/Bone_Fracture_Detection_Presentation.pptx`](docs/Bone_Fracture_Detection_Presentation.pptx). Regenerate with:
+
+```bash
+pip install python-pptx
+python docs/build_presentation.py
+```
+
+Edit slide 1 to insert the faculty **Guide name** (student: SHIBIN ANTONY, Enrollment No. 811241013).
