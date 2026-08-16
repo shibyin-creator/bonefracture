@@ -15,6 +15,7 @@ bone_fracture_system/static/outputs/*
 !bone_fracture_system/static/outputs/.gitkeep
 bone_fracture_system/weights/*
 !bone_fracture_system/weights/.gitkeep
+!bone_fracture_system/weights/README.md
 bone_fracture_system/runs/
 bone_fracture_system/logs/
 bone_fracture_system/data/raw/
