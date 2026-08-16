@@ -1,0 +1,13 @@
+# Improved abstract
+
+**Student:** Shibin Antony  
+**Register No.:** 811241013  
+**Title:** Web-based YOLOv8 CAD for bone fracture detection and morphological classification on a ≥20,000-image X-ray corpus
+
+Bone fractures are among the most common musculoskeletal injuries and need timely, accurate diagnosis. This project builds a **web-based computer-aided detection (CAD)** system that helps clinicians **localize and classify fractures on plain radiographs**. The stack is **Python** (training and inference), **Flask** (backend), and **HTML/CSS/JavaScript** (interactive front end).
+
+Unlike the IEEE Access 2025 base paper, which only **classifies** 10 fracture morphologies on **1,129** Kaggle images with VGG-16, VGG-16+Random Forest, ResNet-50+SVM, and EfficientNetB0+XGBoost (reported accuracy 0.95 / 0.95 / 0.93 / 0.41), this work treats fracture analysis as a **detection + classification** problem. The detector is **YOLOv8**, trained to draw a bounding box and assign one of **seven anatomical classes** used in the original screening design: Elbow Positive, Fingers Positive, Forearm Fracture, Humerus, Humerus Fracture, Shoulder Fracture, and Wrist Positive. A second head (and the paper’s hybrid RF/SVM/XGBoost baselines) predicts **ten morphological types**: avulsion, comminuted, fracture-dislocation, greenstick, hairline, impacted, longitudinal, oblique, pathological, and spiral.
+
+The original abstract used **3,316 train + 399 val (3,715)** images and reported **mAP@0.50 = 86%**. That volume is too small for a stable multi-class detector and smaller than current public X-ray collections. The improved proposal therefore targets a **curated corpus of at least 20,000 radiographs** by unifying GRAZPEDWRI-DX (~20,327 pediatric wrist films), MURA (~40,561 upper-extremity studies), FracAtlas (~4,083 boxed fractures), the Roboflow 7-class YOLO set (~3,715), and the base-paper Kaggle 10-class set (~1,129), with CLAHE, laterality-marker suppression, stratified splits, and conservative augmentation (no MixUp on hairline cracks). A 20,000-image labeled phantom set is bundled so the software pipeline can be trained immediately while the public clinical sets are obtained under their licenses.
+
+The web application returns an overlay, class probabilities, and a low-confidence “refer to radiologist” path. The project is a **preliminary screening prototype**, not a certified medical device. Expected detection target on the large held-out split is **mAP@0.50 ≥ 0.86** (matching the small-set abstract) with **macro-F1 and calibration** reported honestly; morphology classification is compared with the reproduced VGG-16/RF/SVM/XGBoost baselines rather than copying the paper’s 95% figure on 140 test images.

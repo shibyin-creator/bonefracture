@@ -5,7 +5,9 @@
 **Base paper:** Spoorthy Torne et al., “VGG-16, VGG-16 With Random Forest, Resnet50 With SVM, and EfficientNetB0 With XGBoost—Enhancing Bone Fracture Classification in X-Ray Using Deep Learning Models,” *IEEE Access*, vol. 13, pp. 25568–25577, 2025.  
 DOI: [10.1109/ACCESS.2025.3534818](https://doi.org/10.1109/ACCESS.2025.3534818)
 
-**Dataset cited in the paper:** [Bone Break Classification Image Dataset (Kaggle)](https://www.kaggle.com/datasets/pkdarabi/bone-break-classification-image-dataset)
+**Dataset cited in the paper:** [Bone Break Classification Image Dataset (Kaggle)](https://www.kaggle.com/datasets/pkdarabi/bone-break-classification-image-dataset) — **1,129 images (too small for the new project).**
+
+The **improved student proposal** (Shibin Antony, 811241013) raises the corpus to **≥ 20,000 radiographs**, adds YOLOv8 localization, and keeps the paper’s 10 morphology classes. See `docs/PROPOSAL.md`, `docs/ABSTRACT.md`, and the Flask app in `app.py`.
 
 ---
 

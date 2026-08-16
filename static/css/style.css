@@ -1,0 +1,75 @@
+:root {
+  --bg: #07131f;
+  --card: #0e2133;
+  --line: #1d3d57;
+  --text: #e7f1f8;
+  --muted: #8aa4b8;
+  --accent: #2ee0c0;
+  --accent-2: #7ab8ff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(1200px 500px at 10% -10%, #12324a 0%, var(--bg) 45%);
+  color: var(--text);
+  min-height: 100vh;
+}
+a { color: var(--accent-2); text-decoration: none; }
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 6vw;
+  border-bottom: 1px solid var(--line);
+}
+.brand { font-weight: 700; letter-spacing: 0.04em; }
+.nav nav a { margin-left: 1.2rem; color: var(--muted); }
+.nav nav a.active, .nav nav a:hover { color: var(--accent); }
+.wrap { width: min(1100px, 90vw); margin: 2.2rem auto 4rem; }
+.kicker { color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.75rem; }
+h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.2; }
+.lede, .engine { color: var(--muted); max-width: 46rem; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.2rem 1.3rem;
+  margin: 1rem 0;
+}
+.upload { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.drop {
+  flex: 1;
+  min-height: 96px;
+  border: 1px dashed var(--accent-2);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  cursor: pointer;
+}
+button, .btn {
+  background: linear-gradient(135deg, var(--accent), #1aa889);
+  color: #042018;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.75rem 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-block;
+}
+.grid.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.chips { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.chips li {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.85rem;
+}
+.chips.muted li { color: var(--muted); }
+.preview { width: 100%; border-radius: 16px; border: 1px solid var(--line); }
+.findings { list-style: none; padding: 0; }
+.findings li { display: grid; gap: 0.15rem; margin: 0.8rem 0; }
+.findings span { color: var(--accent); }
+.findings small { color: var(--muted); }
+.flash { color: #ffb4b4; }

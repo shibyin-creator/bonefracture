@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bone Fracture CAD | Detect &amp; Classify</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <header class="nav">
+    <div class="brand">OsteoScan CAD</div>
+    <nav>
+      <a href="{{ url_for('index') }}" class="active">Detect</a>
+      <a href="{{ url_for('about') }}">Project</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <p class="kicker">YOLOv8 + Flask · ≥ 20,000-image training plan</p>
+      <h1>Automated bone fracture detection from X-ray images</h1>
+      <p class="lede">
+        Upload a radiograph. The system localizes a suspected fracture and assigns one of seven
+        anatomical classes, with optional morphology types from the IEEE Access 2025 baseline.
+      </p>
+      <p class="engine">Active engine: <strong>{{ engine_mode }}</strong></p>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flash">{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul>
+      {% endif %}
+    {% endwith %}
+
+    <form class="card upload" action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+      <label class="drop" for="image">
+        <input id="image" name="image" type="file" accept="image/*" required />
+        <span>Drop X-ray or click to browse</span>
+      </label>
+      <button type="submit">Run detection</button>
+    </form>
+
+    <section class="grid two">
+      <article class="card">
+        <h2>Detection classes (YOLOv8)</h2>
+        <ul class="chips">
+          {% for c in detection_classes %}<li>{{ c }}</li>{% endfor %}
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Morphology classes (base paper)</h2>
+        <ul class="chips muted">
+          {% for c in morphology_classes %}<li>{{ c }}</li>{% endfor %}
+        </ul>
+      </article>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
