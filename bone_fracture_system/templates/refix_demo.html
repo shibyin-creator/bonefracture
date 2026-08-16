@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Refixation Demo · Study {{ study.id }}{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Surgical simulation</p>
+    <h1>Post-surgical refixation demo</h1>
+    <p class="lede">Educational overlay of plates, screws, or an intramedullary rod on the source radiograph. Not a surgical planner.</p>
+  </div>
+  <a class="btn" href="{{ url_for('dashboard') }}">Back to analysis</a>
+</header>
+
+<section class="grid-2">
+  <article class="panel">
+    <h2>Study {{ study.id }}</h2>
+    <dl class="meta-list">
+      <div><dt>Morphology</dt><dd>{{ study.predicted_class }}</dd></div>
+      <div><dt>Anatomical site</dt><dd>{{ study.anatomical_site }}</dd></div>
+      <div><dt>Confidence</dt><dd>{{ '%.1f'|format((study.confidence or 0) * 100) }}%</dd></div>
+      <div><dt>Classifier</dt><dd>{{ study.classifier_model }}</dd></div>
+      <div><dt>Detector</dt><dd>{{ study.detector_model }}</dd></div>
+    </dl>
+  </article>
+  <article class="panel">
+    <h2>Hardware controls</h2>
+    <div class="btn-row">
+      <button class="btn" type="button" data-hw="plate">Locking plate</button>
+      <button class="btn" type="button" data-hw="rod">IM rod</button>
+      <button class="btn" type="button" data-hw="screws">Lag screws</button>
+      <button class="btn" type="button" id="resetHw">Reset</button>
+    </div>
+    <p class="fine">Drag on the canvas to reposition hardware along the estimated bone axis.</p>
+  </article>
+</section>
+
+<section class="viewer-grid">
+  <figure>
+    <figcaption>Original</figcaption>
+    <img src="{{ study.yolo_path.replace('_yolo.png', '_original.png') if study.yolo_path else study.gradcam_path }}" alt="Original" id="srcOriginal" />
+  </figure>
+  <figure>
+    <figcaption>Grad-CAM</figcaption>
+    <img src="{{ study.gradcam_path }}" alt="Grad-CAM" />
+  </figure>
+  <figure class="span-2">
+    <figcaption>Interactive fixation canvas</figcaption>
+    <canvas id="refixCanvas" width="960" height="640"></canvas>
+  </figure>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/refix_simulation.js') }}"></script>
+<script>
+  window.REFIX_CONFIG = {
+    imageUrl: {{ (study.refix_path or study.yolo_path or study.gradcam_path)|tojson }},
+    sourceUrl: {{ (study.yolo_path.replace('_yolo.png', '_original.png') if study.yolo_path else study.gradcam_path)|tojson }},
+    predictedClass: {{ study.predicted_class|tojson }},
+    detections: {{ detections|tojson }},
+  };
+  if (window.FractureRefix) window.FractureRefix.mount(document.getElementById("refixCanvas"), window.REFIX_CONFIG);
+</script>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Clinical Analysis · FractureNet{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Diagnostic workstation</p>
+    <h1>Bone fracture detection</h1>
+    <p class="lede">Upload a radiograph or DICOM. The pipeline runs YOLOv8 localization, VGG-16 ensemble classification, Grad-CAM, and a refixation overlay for severe patterns.</p>
+  </div>
+  <div class="kpi-row">
+    <article class="kpi"><span>Studies</span><strong>{{ total_studies }}</strong></article>
+    <article class="kpi warn"><span>Severe / displaced</span><strong>{{ severe_studies }}</strong></article>
+    <article class="kpi"><span>Runtime</span><strong>{% if demo_mode %}Demo{% else %}Weights{% endif %}</strong></article>
+  </div>
+</header>
+
+<section class="grid-2">
+  <article class="panel">
+    <h2>Radiograph ingest</h2>
+    <form id="uploadForm" class="dropzone" enctype="multipart/form-data">
+      <input id="fileInput" type="file" name="image" accept=".png,.jpg,.jpeg,.bmp,.tif,.tiff,.dcm,.dicom,.webp,image/*" required />
+      <p>Drop an X-ray here or click to browse. PNG, JPEG, TIFF, DICOM.</p>
+      <button type="submit" class="btn primary" id="analyzeBtn">Run inference</button>
+    </form>
+    <p id="statusLine" class="status" hidden></p>
+  </article>
+  <article class="panel">
+    <h2>Published benchmarks</h2>
+    <table class="metrics">
+      <thead><tr><th>Model</th><th>Accuracy / mAP</th></tr></thead>
+      <tbody>
+        <tr><td>VGG-16 Softmax</td><td>0.95</td></tr>
+        <tr><td>VGG-16 + Random Forest</td><td>0.95</td></tr>
+        <tr><td>ResNet-50 + SVM</td><td>0.93</td></tr>
+        <tr><td>EfficientNetB0 + XGBoost</td><td>0.41</td></tr>
+        <tr><td>YOLOv8 detector</td><td>mAP50 0.86</td></tr>
+      </tbody>
+    </table>
+    <p class="fine">IEEE Access 2025 (Torne et al.) and project abstract (3,316 / 399 YOLO split).</p>
+  </article>
+</section>
+
+<section class="panel result-panel" id="resultPanel" hidden>
+  <div class="result-head">
+    <div>
+      <p class="eyebrow">Inference result</p>
+      <h2 id="predClass">—</h2>
+      <p id="predMeta" class="lede"></p>
+    </div>
+    <a id="refixLink" class="btn" hidden href="#">Open refixation demo</a>
+  </div>
+  <div class="viewer-grid">
+    <figure>
+      <figcaption>Original</figcaption>
+      <img id="imgOriginal" alt="Original radiograph" />
+    </figure>
+    <figure>
+      <figcaption>YOLOv8 localization</figcaption>
+      <img id="imgYolo" alt="YOLO detections" />
+    </figure>
+    <figure>
+      <figcaption>Grad-CAM</figcaption>
+      <img id="imgCam" alt="Grad-CAM heatmap" />
+    </figure>
+    <figure id="figRefix" hidden>
+      <figcaption>Refixation overlay</figcaption>
+      <img id="imgRefix" alt="Surgical refixation demo" />
+    </figure>
+  </div>
+  <ul id="noteList" class="notes"></ul>
+</section>
+
+<section class="panel">
+  <h2>Recent studies</h2>
+  <table class="metrics">
+    <thead>
+      <tr><th>ID</th><th>File</th><th>Class</th><th>Site</th><th>Conf.</th><th>Refix</th><th>When</th></tr>
+    </thead>
+    <tbody>
+      {% for row in recent %}
+      <tr>
+        <td>{{ row.id }}</td>
+        <td>{{ row.original_filename }}</td>
+        <td>{{ row.predicted_class }}</td>
+        <td>{{ row.anatomical_site }}</td>
+        <td>{{ '%.2f'|format(row.confidence or 0) }}</td>
+        <td>
+          {% if row.needs_refixation %}
+            <a href="{{ url_for('refix_demo', study_id=row.id) }}">Demo</a>
+          {% else %}—{% endif %}
+        </td>
+        <td>{{ row.created_at }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">No studies yet. Upload a radiograph to begin.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+const form = document.getElementById("uploadForm");
+const statusLine = document.getElementById("statusLine");
+const resultPanel = document.getElementById("resultPanel");
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const file = document.getElementById("fileInput").files[0];
+  if (!file) return;
+  const body = new FormData();
+  body.append("image", file);
+  statusLine.hidden = false;
+  statusLine.textContent = "Running YOLOv8 + VGG-16 ensemble + Grad-CAM…";
+  document.getElementById("analyzeBtn").disabled = true;
+  try {
+    const res = await fetch("{{ url_for('api_infer') }}", { method: "POST", body });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Inference failed");
+    resultPanel.hidden = false;
+    document.getElementById("predClass").textContent = data.predicted_class;
+    document.getElementById("predMeta").textContent =
+      `${data.anatomical_site} · ${data.classifier_model} · confidence ${(data.confidence * 100).toFixed(1)}% · ${data.detector_model}`;
+    document.getElementById("imgOriginal").src = data.original_url;
+    document.getElementById("imgYolo").src = data.yolo_url;
+    document.getElementById("imgCam").src = data.gradcam_url;
+    const figRefix = document.getElementById("figRefix");
+    const refixLink = document.getElementById("refixLink");
+    if (data.refix_url) {
+      figRefix.hidden = false;
+      document.getElementById("imgRefix").src = data.refix_url;
+      refixLink.hidden = false;
+      refixLink.href = data.refix_url_page;
+    } else {
+      figRefix.hidden = true;
+      refixLink.hidden = true;
+    }
+    const notes = document.getElementById("noteList");
+    notes.innerHTML = "";
+    (data.notes || []).forEach((n) => {
+      const li = document.createElement("li");
+      li.textContent = n;
+      notes.appendChild(li);
+    });
+    statusLine.textContent = data.demo_mode ? "Complete (demo weights)." : "Complete.";
+  } catch (err) {
+    statusLine.textContent = err.message;
+  } finally {
+    document.getElementById("analyzeBtn").disabled = false;
+  }
+});
+</script>
+{% endblock %}
