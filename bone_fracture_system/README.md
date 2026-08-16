@@ -42,6 +42,13 @@ Without trained weights the API still runs in **demo mode** (OpenCV preprocessin
 
 ## Training
 
+See [`data/DATASETS.md`](data/DATASETS.md) for how to **get**, **show**, and **cross-check** every public set (including the 20,327-row GRAZPEDWRI-DX manifest).
+
+```bash
+python data/audit_datasets.py --probe
+# then open http://127.0.0.1:5000/datasets after python app.py
+```
+
 ImageFolder (classification):
 
 ```text

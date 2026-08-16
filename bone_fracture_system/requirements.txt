@@ -25,3 +25,4 @@ tensorflow>=2.14.0
 
 # Optional DICOM / notebook helpers
 ipykernel>=6.25.0
+kaggle>=1.6.0

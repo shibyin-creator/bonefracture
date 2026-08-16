@@ -170,6 +170,28 @@ figcaption { color: var(--muted); margin-bottom: 8px; font-size: 0.85rem; }
 .meta-list dt { color: var(--muted); }
 .notes { color: var(--muted); }
 
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pill.ok, .pill.LIVE { background: rgba(46, 196, 182, 0.2); color: var(--accent); }
+.pill.missing, .pill.bad { background: rgba(231, 111, 81, 0.2); color: var(--danger); }
+.pill.partial { background: rgba(244, 162, 97, 0.2); color: var(--warn); }
+.code-block {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  overflow: auto;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
 .theme-fab {
   position: fixed;
   right: 18px;

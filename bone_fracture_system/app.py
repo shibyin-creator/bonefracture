@@ -25,6 +25,7 @@ from werkzeug.utils import secure_filename
 from config import Config
 from db import execute, fetchall, fetchone, init_db, log_audit, utcnow
 from models.inference import PIPELINE
+from data.audit_datasets import build_report, load_catalog
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -139,6 +140,69 @@ def dashboard():
         severe_studies=severe["n"] if severe else 0,
         demo_mode=PIPELINE.demo_mode,
     )
+
+
+def _dataset_view_model(report: dict) -> dict:
+    catalog = load_catalog()
+    roles = {s["id"]: s for s in catalog["sources"]}
+    remotes = []
+    for source in catalog["sources"]:
+        hit = next((r for r in report.get("remotes") or [] if r.get("id") == source["id"]), {})
+        remotes.append(
+            {
+                "id": source["id"],
+                "role": source.get("role"),
+                "expected": source.get("expected_images"),
+                "url": source.get("url") or source.get("kaggle_url"),
+                "ok": hit.get("ok"),
+                "detail": hit.get("detail"),
+                "title": hit.get("title"),
+            }
+        )
+    local = report.get("local") or {}
+    graz = local.get("graz") or {}
+    return {
+        "remotes": remotes,
+        "checklist": report.get("morphology_checklist") or [],
+        "local": local,
+        "graz_rows": graz.get("n_rows", 0),
+        "graz_ok": bool(graz.get("match")),
+        "generated_at": report.get("generated_at"),
+        "roles": roles,
+    }
+
+
+@app.route("/datasets")
+@login_required
+def datasets_page():
+    report_path = Config.DATASET_DIR / "inventory_report.json"
+    if report_path.exists():
+        report = json.loads(report_path.read_text())
+    else:
+        report = build_report(probe=False)
+    return render_template("datasets.html", **_dataset_view_model(report))
+
+
+@app.route("/datasets/probe", methods=["POST"])
+@login_required
+def datasets_probe():
+    try:
+        report = build_report(probe=True)
+        flash("Live URLs probed. Inventory updated.", "ok")
+    except Exception as exc:
+        flash(f"Probe failed: {exc}", "error")
+        report = build_report(probe=False)
+    log_audit(current_user(), "dataset_probe", "inventory refresh", request.remote_addr or "")
+    return redirect(url_for("datasets_page"))
+
+
+@app.route("/api/datasets")
+@login_required
+def api_datasets():
+    report_path = Config.DATASET_DIR / "inventory_report.json"
+    if report_path.exists():
+        return jsonify(json.loads(report_path.read_text()))
+    return jsonify(build_report(probe=False))
 
 
 @app.route("/refix/<int:study_id>")

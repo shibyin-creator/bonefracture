@@ -38,8 +38,26 @@ def test_allowed_extensions_include_dicom():
     assert "png" in Config.ALLOWED_EXTENSIONS
 
 
+def test_graz_manifest_has_20327_rows():
+    from data.audit_datasets import audit_graz_manifest, load_catalog
+
+    catalog = load_catalog()
+    ids = {s["id"] for s in catalog["sources"]}
+    assert ids >= {
+        "bone_break_classification",
+        "bonefracture_yolo8",
+        "grazpedwri_dx",
+        "fracatlas",
+    }
+    graz = audit_graz_manifest()
+    assert graz["present"] is True
+    assert graz["n_rows"] == 20327
+    assert graz["match"] is True
+
+
 if __name__ == "__main__":
     test_taxonomy_covers_paper_and_abstract()
     test_refixation_overlay_changes_pixels()
     test_allowed_extensions_include_dicom()
+    test_graz_manifest_has_20327_rows()
     print("ok")
