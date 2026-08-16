@@ -1,0 +1,28 @@
+{
+  "total_images": 20000,
+  "train": 16000,
+  "val": 2000,
+  "test": 2000,
+  "detection_classes": [
+    "Elbow Positive",
+    "Fingers Positive",
+    "Forearm Fracture",
+    "Humerus",
+    "Humerus Fracture",
+    "Shoulder Fracture",
+    "Wrist Positive"
+  ],
+  "morphology_classes": [
+    "Avulsion",
+    "Comminuted",
+    "Fracture-Dislocation",
+    "Greenstick",
+    "Hairline",
+    "Impacted",
+    "Longitudinal",
+    "Oblique",
+    "Pathological",
+    "Spiral"
+  ],
+  "note": "Phantom corpus for pipeline training. Merge GRAZPEDWRI-DX (~20,327), MURA (~40,561), FracAtlas (~4,083), Roboflow 7-class, and Kaggle 10-class morphology for the real \u226520,000 clinical set."
+}

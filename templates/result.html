@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Detection result | OsteoScan CAD</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <header class="nav">
+    <div class="brand">OsteoScan CAD</div>
+    <nav>
+      <a href="{{ url_for('index') }}">Detect</a>
+      <a href="{{ url_for('about') }}">Project</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    <p class="kicker">Engine: {{ engine_mode }}</p>
+    <h1>Prediction overlay</h1>
+    <div class="grid two">
+      <img class="preview" src="{{ result_image }}" alt="Annotated X-ray" />
+      <article class="card">
+        <h2>Detections</h2>
+        {% if detections %}
+          <ul class="findings">
+            {% for d in detections %}
+              <li>
+                <strong>{{ d.class_name }}</strong>
+                <span>{{ '%.1f'|format(d.confidence * 100) }}%</span>
+                <small>box {{ d.box }}</small>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No fracture box returned. Try a clearer AP/lateral radiograph.</p>
+        {% endif %}
+        <a class="btn" href="{{ url_for('index') }}">New image</a>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
