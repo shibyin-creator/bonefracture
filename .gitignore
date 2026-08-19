@@ -4,7 +4,8 @@ __pycache__/
 .venv/
 venv/
 env/
-.env
+web_app/database.db
+bone_fracture_system/database.db
 *.log
 .ipynb_checkpoints/
 .DS_Store
@@ -20,11 +21,19 @@ bone_fracture_system/runs/
 bone_fracture_system/logs/
 bone_fracture_system/data/raw/
 bone_fracture_system/data/processed/
+bone_fracture_system/data/classification/train/
+bone_fracture_system/data/classification/val/
 
 *.h5
 *.pt
 *.pth
 *.onnx
 *.joblib
-*.pkl
-!bone_fracture_system/weights/.gitkeep
+web_app/static/uploads/*
+!web_app/static/uploads/.gitkeep
+web_app/static/outputs/*
+!web_app/static/outputs/.gitkeep
+logs/
+weights/*
+!weights/.gitkeep
+!weights/README.md
