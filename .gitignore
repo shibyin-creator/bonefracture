@@ -1,0 +1,13 @@
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+venv/
+data/*.csv
+data/*.sqlite3
+artifacts/**/*.joblib
+artifacts/metrics/*.csv
+artifacts/metrics/*.json
+logs/*.log
+.streamlit/
+.pytest_cache/

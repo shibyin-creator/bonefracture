@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cardiac Risk Assessment — Presentation</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #121a2b;
+      --accent: #c81e1e;
+      --text: #f4f7fb;
+      --muted: #9aa7bd;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: "Segoe UI", system-ui, sans-serif; }
+    .deck { height: 100%; }
+    .slide {
+      display: none;
+      height: 100%;
+      padding: 4.5rem 5rem 4rem;
+      background: radial-gradient(1000px 500px at 10% -10%, #1b2438 0%, #0b1220 50%);
+    }
+    .slide.active { display: flex; flex-direction: column; }
+    h1 { font-size: 2.4rem; margin: 0 0 0.6rem; }
+    h2 { font-size: 2rem; color: #fff; border-left: 6px solid var(--accent); padding-left: 0.8rem; }
+    p, li { font-size: 1.25rem; line-height: 1.45; color: #e8eef7; }
+    .muted { color: var(--muted); font-size: 1.05rem; }
+    .bar { height: 5px; width: 180px; background: linear-gradient(90deg, #c81e1e, #e85d5d, #f4f7fb); border-radius: 999px; margin: 0.8rem 0 1.4rem; }
+    table { border-collapse: collapse; width: min(100%, 980px); }
+    th, td { border: 1px solid #2a3a58; padding: 0.45rem 0.7rem; text-align: left; }
+    th { background: #1a2740; }
+    .footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.7rem 1.4rem; background: #101827; color: var(--muted); font-size: 0.92rem;
+    }
+    .warn { color: #e85d5d; font-weight: 700; }
+    kbd { background: #243049; padding: 0.1rem 0.4rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <section class="slide active">
+      <div class="bar"></div>
+      <h1>AI-Powered Cardiac Risk Assessment and Heart Failure Prediction</h1>
+      <p>Extending IEEE SPIN 2024 with ensembles, a &gt;20,000-patient cohort, and ECG interval screening</p>
+      <p class="muted">University project presentation · not a medical device</p>
+    </section>
+    <section class="slide">
+      <h2>Problem</h2>
+      <ul>
+        <li>Cardiovascular disease: ~17.9 million deaths / year (WHO)</li>
+        <li>Heart-failure follow-up mortality is hard to triage from routine labs</li>
+        <li>Need an explainable research classifier — not a replacement for clinicians</li>
+      </ul>
+    </section>
+    <section class="slide">
+      <h2>Base paper — IEEE SPIN 2024</h2>
+      <p>Sandilya, Pal, Dahiya, Dana — prognostic modeling as classification</p>
+      <ul>
+        <li>UCI Heart Failure Clinical Records: <b>299</b> patients, <b>12</b> attributes + DEATH_EVENT</li>
+        <li>NB, KNN, DT, SVM, LR, RF, XGBoost · StandardScaler · 80/20 · GridSearch</li>
+        <li>Best: <b>Random Forest 88.33%</b> test accuracy</li>
+        <li>Top features: time, ejection fraction, serum creatinine, age</li>
+      </ul>
+    </section>
+    <section class="slide">
+      <h2>Our contributions</h2>
+      <table>
+        <tr><th>SPIN 2024</th><th>This project</th></tr>
+        <tr><td>299 records</td><td>&gt; 20,000 synthetic multi-modal records</td></tr>
+        <tr><td>12 clinical features</td><td>+ ECG intervals and flags</td></tr>
+        <tr><td>7 classifiers</td><td>+ Stacking (LR meta; XGB + RF + SVM)</td></tr>
+        <tr><td>Accuracy GridSearch</td><td>Accuracy, F1, MCC, ROC-AUC</td></tr>
+        <tr><td>Streamlit UI</td><td>Medical UI + secure /admin portal</td></tr>
+      </table>
+    </section>
+    <section class="slide">
+      <h2>Dataset</h2>
+      <p><b>Core 12:</b> age, anaemia, CPK, diabetes, EF, high BP, platelets, creatinine, sodium, sex, smoking, follow-up time</p>
+      <p><b>ECG:</b> PR, QRS, QT, QTc, ST, RR, P-wave, T amplitude, heart rate</p>
+      <p><b>Flags:</b> prolonged QRS / QTc, ST shift, brady/tachycardia</p>
+      <p class="muted">Labels emphasize low EF, high creatinine, short time, older age (literature ranking).</p>
+    </section>
+    <section class="slide">
+      <h2>Pipeline</h2>
+      <p>Ingest / synthesize → validate → impute → StandardScaler → SMOTE (train) → classifiers + stacking → GridSearchCV → IEEE metrics + XGBoost importance → Streamlit inference</p>
+    </section>
+    <section class="slide">
+      <h2>Metrics we report</h2>
+      <p>Accuracy · Precision · Recall · F1 · MCC · PR-AUC · ROC-AUC</p>
+      <p class="muted">MCC and PR-AUC matter because death events are the minority class.</p>
+    </section>
+    <section class="slide">
+      <h2>Software</h2>
+      <ul>
+        <li>OOP: DatasetHandler, DataPreprocessor, AdvancedHeartModels, HyperparameterTuner, AdminAuthManager</li>
+        <li>Notebook: main_notebook.ipynb (Colab / Jupyter)</li>
+        <li>UI: clinician form, ECG visualizer, risk %</li>
+        <li>Admin: PBKDF2 login, upload, retrain, logs, metrics</li>
+      </ul>
+    </section>
+    <section class="slide">
+      <h2>Live demo</h2>
+      <ol>
+        <li>High-risk patient: low EF, high creatinine, short follow-up</li>
+        <li>ECG trace + flags (teaching waveform)</li>
+        <li>Admin metrics and feature-importance ranking</li>
+      </ol>
+    </section>
+    <section class="slide">
+      <h2>Limitations</h2>
+      <ul>
+        <li>20k rows are synthetic — not a clinical trial</li>
+        <li>ECG plot is reconstructed from intervals, not a recorded 12-lead</li>
+        <li>Prototype ≠ certified medical device</li>
+        <li class="warn">Bone fractures supported: 0 — this is not an X-ray system (206 adult bones exist anatomically, none are inputs here)</li>
+      </ul>
+    </section>
+    <section class="slide">
+      <h2>References</h2>
+      <ol>
+        <li>Sandilya et al., SPIN 2024, doi:10.1109/SPIN60856.2024.10512260</li>
+        <li>Chicco &amp; Jurman, BMC Med. Inform. Decis. Mak., 2020</li>
+        <li>Ahmad et al., PLOS ONE, 2017 (UCI HF records)</li>
+        <li>Chen &amp; Guestrin, XGBoost, KDD 2016</li>
+        <li>WHO, Cardiovascular diseases, 2021</li>
+      </ol>
+    </section>
+    <section class="slide">
+      <div class="bar"></div>
+      <h1>Thank you</h1>
+      <p>Questions?</p>
+      <p class="muted">Open docs/presentation.html · streamlit run app.py · docs/08_BONE_FRACTURE_SCOPE.md</p>
+    </section>
+  </div>
+  <div class="footer">
+    <span>Cardiac risk assessment · IEEE SPIN 2024 extension</span>
+    <span><span id="pos">1</span> / <span id="n">1</span> &nbsp; <kbd>←</kbd> <kbd>→</kbd> or click</span>
+  </div>
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    let i = 0;
+    const pos = document.getElementById("pos");
+    document.getElementById("n").textContent = slides.length;
+    function show(k) {
+      i = (k + slides.length) % slides.length;
+      slides.forEach((s, idx) => s.classList.toggle("active", idx === i));
+      pos.textContent = i + 1;
+    }
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") show(i + 1);
+      if (e.key === "ArrowLeft") show(i - 1);
+    });
+    document.body.addEventListener("click", (e) => {
+      if (e.clientX > innerWidth / 2) show(i + 1); else show(i - 1);
+    });
+  </script>
+</body>
+</html>
