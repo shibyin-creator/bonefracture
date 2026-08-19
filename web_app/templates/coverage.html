@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Body coverage · FractureNet{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Anatomy map</p>
+    <h1>Which bones can this project test?</h1>
+    <p class="lede">The adult skeleton has <strong>206</strong> bones. This workstation does not classify all 206. It tests <strong>10 fracture patterns</strong> on films from <strong>11 regions</strong> (~42 named bones/groups). Published YOLO results are the <strong>7 upper-limb</strong> classes.</p>
+  </div>
+</header>
+
+<section class="kpi-row">
+  <article class="kpi"><span>Adult skeleton</span><strong>206</strong></article>
+  <article class="kpi"><span>Morphology classes</span><strong>10</strong></article>
+  <article class="kpi"><span>Body regions</span><strong>11</strong></article>
+  <article class="kpi"><span>Named bones in scope</span><strong>~42</strong></article>
+  <article class="kpi"><span>Region × type (max)</span><strong>110</strong></article>
+</section>
+
+<section class="panel">
+  <h2>Say this in the viva</h2>
+  <p class="lede">{{ atlas.headline_for_viva }}</p>
+</section>
+
+<section class="panel">
+  <h2>Regions and bones</h2>
+  <table class="metrics">
+    <thead>
+      <tr><th>Region</th><th>Bones</th><th>App labels</th><th>Benchmark data</th></tr>
+    </thead>
+    <tbody>
+      {% for r in atlas.regions %}
+      <tr>
+        <td>{{ r.region }}</td>
+        <td>{{ r.bones | join("; ") }}</td>
+        <td>{{ r.detector_labels | join(", ") }}</td>
+        <td>{{ r.benchmark_data }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="panel">
+  <h2>Ten morphological patterns</h2>
+  <table class="metrics">
+    <thead><tr><th>Class</th><th>Meaning</th><th>Often seen in</th></tr></thead>
+    <tbody>
+      {% for m in atlas.morphology %}
+      <tr>
+        <td>{{ m.name }}</td>
+        <td>{{ m.plain }}</td>
+        <td>{{ m.common_bones }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="panel">
+  <h2>Not dedicated classes unless you retrain</h2>
+  <ul class="notes">
+    {% for item in atlas.out_of_scope_unless_retrained %}
+    <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

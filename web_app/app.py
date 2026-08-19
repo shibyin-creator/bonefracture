@@ -199,6 +199,14 @@ def datasets_page():
     return render_template("datasets.html", **_dataset_view_model(report))
 
 
+@app.route("/coverage")
+@login_required
+def coverage_page():
+    atlas_path = ROOT / "docs" / "bone_coverage.json"
+    atlas = json.loads(atlas_path.read_text())
+    return render_template("coverage.html", atlas=atlas)
+
+
 @app.route("/datasets/probe", methods=["POST"])
 @login_required
 def datasets_probe():

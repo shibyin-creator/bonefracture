@@ -75,6 +75,17 @@ python main.py infer --image path/to/xray.png
 
 Colab: `notebooks/Bone_Fracture_Detection_Master.ipynb`.
 
-## Safety
+## Presentation pack
+
+| Document | Use |
+| --- | --- |
+| [`docs/PRESENTATION_GUIDE.md`](docs/PRESENTATION_GUIDE.md) | 10–12 min talk + live demo script |
+| [`docs/BONE_COVERAGE_ATLAS.md`](docs/BONE_COVERAGE_ATLAS.md) | **How many bones/fractures we can test** |
+| [`docs/ONE_PAGER.md`](docs/ONE_PAGER.md) | Printable handout |
+| [`docs/Q_AND_A.md`](docs/Q_AND_A.md) | Examiner questions |
+| [`docs/Bone_Coverage_Presentation.pptx`](docs/Bone_Coverage_Presentation.pptx) | 8 slides on body coverage |
+| Academic 14-slide deck | `bone_fracture_system/docs/Bone_Fracture_Detection_Presentation.pptx` |
+
+**Coverage in one line:** not all 206 bones — **10 fracture patterns** on **11 regions** (~42 named bones). Live page after login: `/coverage`.
 
 Research/education software. **Not** a medical device. Outputs require licensed clinical review.
