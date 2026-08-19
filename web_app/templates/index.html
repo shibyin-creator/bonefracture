@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FractureNet · Bone Fracture Detection</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/medical_theme.css') }}" />
+</head>
+<body class="auth-body">
+  <section class="login-card" style="grid-template-columns: 1fr;">
+    <div class="login-hero">
+      <span class="brand-mark lg">BF</span>
+      <h1>Medical Image Analysis for Bone Fracture Detection Using Deep Learning</h1>
+      <p>YOLOv8 localization (mAP50 86%) · IEEE Access 2025 VGG-16 / Random Forest / ResNet-50+SVM / EfficientNetB0+XGBoost · Grad-CAM · educational surgical re-fixation</p>
+      <ul class="login-metrics">
+        <li>10 morphological classes · 11 skeletal regions</li>
+        <li>1,129-image paper set · 20,327 GRAZPEDWRI-DX wrist studies</li>
+        <li>Admin and clinician portals with session RBAC</li>
+      </ul>
+      <p><a class="btn primary" href="{{ url_for('login') }}">Sign in to the clinical workstation</a></p>
+      <p class="hint">Research &amp; Diagnostic Support Tool Only — Not an Authorized Medical Device.</p>
+    </div>
+  </section>
+  <button id="themeToggle" class="theme-fab" type="button">◐</button>
+  <script>
+    const root = document.documentElement;
+    const saved = localStorage.getItem("bf-theme");
+    if (saved) root.setAttribute("data-theme", saved);
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("bf-theme", next);
+    });
+  </script>
+</body>
+</html>

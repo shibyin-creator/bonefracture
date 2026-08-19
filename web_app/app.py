@@ -94,7 +94,7 @@ def inject_globals():
 def index():
     if current_user():
         return redirect(url_for("dashboard"))
-    return redirect(url_for("login"))
+    return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])

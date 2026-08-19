@@ -1,2 +1,4 @@
-Master Colab/Jupyter notebook: `Bone_Fracture_Detection_Master.ipynb`.
-Run from repo root or set ROOT to the clone path. On Colab, upload/clone this repository first.
+Primary notebook: `fracture_detection_pipeline.ipynb` (Colab / local).
+Also: `Bone_Fracture_Detection_Master.ipynb`.
+Research & Diagnostic Support Tool Only — Not an Authorized Medical Device.
+

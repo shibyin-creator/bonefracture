@@ -26,9 +26,10 @@ def cmd_web(args: argparse.Namespace) -> None:
 
 
 def cmd_audit(args: argparse.Namespace) -> None:
-    from dataset_handler.catalog import probe_and_report
+    from data.audit_datasets import build_report, print_summary
 
-    probe_and_report(probe=args.probe)
+    report = build_report(probe=args.probe)
+    print_summary(report)
 
 
 def cmd_sample_data(_: argparse.Namespace) -> None:

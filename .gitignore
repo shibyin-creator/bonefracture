@@ -21,8 +21,11 @@ bone_fracture_system/runs/
 bone_fracture_system/logs/
 bone_fracture_system/data/raw/
 bone_fracture_system/data/processed/
-bone_fracture_system/data/classification/train/
-bone_fracture_system/data/classification/val/
+data/classification/train/**
+!data/classification/train/.gitkeep
+data/classification/val/**
+!data/classification/val/.gitkeep
+data/raw/
 
 *.h5
 *.pt

@@ -29,7 +29,7 @@ class Config:
     UPLOAD_FOLDER = WEB_DIR / "static" / "uploads"
     OUTPUT_FOLDER = WEB_DIR / "static" / "outputs"
     WEIGHTS_DIR = Path(os.environ.get("WEIGHTS_DIR", ROOT / "weights"))
-    DATASET_DIR = Path(os.environ.get("DATASET_DIR", LEGACY_DATA if LEGACY_DATA.exists() else ROOT / "data"))
+    DATASET_DIR = Path(os.environ.get("DATASET_DIR", ROOT / "data"))
     YOLO_DATA_YAML = DATASET_DIR / "yolo" / "data.yaml"
     LOG_DIR = ROOT / "logs"
     METRICS_DIR = ROOT / "logs" / "metrics"

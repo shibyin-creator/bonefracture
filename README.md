@@ -5,17 +5,29 @@ IEEE Access 2025 classification stack (VGG-16 Softmax, VGG-16 + Random Forest, R
 ## Repository layout
 
 ```text
-├── dataset_handler/      # 256×256×3 scaling, augmentation, balancing, >20k streaming, catalog audit
-├── models/               # YOLOv8, VGG-16, ResNet-50, EfficientNetB0 + two-stage pipeline
-├── classifiers/          # Dense-Softmax, Random Forest, SVM, XGBoost heads
-├── explainability/       # Grad-CAM + precision/recall/F1/specificity/accuracy/GFLOPs/ROC
-├── refix_simulation/     # Gap realignment vectors + plate/screw/IM-rod overlay + pre/post panel
-├── web_app/              # Flask + HTML5/CSS3 medical dashboard (admin vs clinician RBAC)
-├── notebooks/            # Bone_Fracture_Detection_Master.ipynb (Colab / Jupyter)
+├── data/
+│   ├── audit_datasets.py        # HTTP prober, Kaggle/Figshare downloader
+│   ├── DATASETS.md              # 1,129 10-class set + GRAZPEDWRI-DX 20,327
+│   ├── classification/          # ImageFolder train/val · 256×256×3
+│   └── yolo/                    # images/, labels/, data.yaml · 640²
+├── models/
+│   ├── train_vgg16_rf.py        # VGG-16 Softmax & VGG-16 + Random Forest
+│   ├── train_ensembles.py       # ResNet-50 + SVM, EfficientNetB0 + XGBoost
+│   ├── train_yolov8.py          # YOLOv8 fine-tune (yaml + loop)
+│   └── gradcam.py               # Grad-CAM (Keras / OpenCV)
+├── classifiers/                 # Hybrid heads + joblib wrappers
+├── refix_simulation/
+│   └── orthopedics_refix.py     # Alignment vectors + plate/screw/IM overlay
+├── web_app/                     # Flask · index.html, login.html, dashboard.html
+├── notebooks/
+│   └── fracture_detection_pipeline.ipynb
+├── weights/
 ├── config.py
 ├── requirements.txt
 └── main.py
 ```
+
+**Research & Diagnostic Support Tool Only — Not an Authorized Medical Device.**
 
 ### Categorical cross-entropy (paper Eq. 1)
 
