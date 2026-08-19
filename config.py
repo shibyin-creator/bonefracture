@@ -142,7 +142,6 @@ PAPER_PARAM_GRIDS = {
     },
     "Logistic Regression": {
         "C": [0.01, 0.1, 1.0, 10.0],
-        "penalty": ["l2"],
         "solver": ["lbfgs", "liblinear"],
         "max_iter": [500],
     },

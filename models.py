@@ -10,6 +10,7 @@ from typing import Any, Optional
 import joblib
 import numpy as np
 import pandas as pd
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import RandomForestClassifier, StackingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
@@ -68,12 +69,16 @@ class AdvancedHeartModels:
         self.best_model_name: Optional[str] = None
 
     def build_estimators(self, probability_svm: bool = True) -> dict[str, Any]:
-        svm = SVC(
+        base_svm = SVC(
             C=1.0,
             kernel="rbf",
             gamma="scale",
-            probability=probability_svm,
             random_state=self.random_state,
+        )
+        svm = (
+            CalibratedClassifierCV(base_svm, method="sigmoid", cv=3)
+            if probability_svm
+            else base_svm
         )
         rf = RandomForestClassifier(
             n_estimators=80,
@@ -98,7 +103,6 @@ class AdvancedHeartModels:
             "SVM": svm,
             "Logistic Regression": LogisticRegression(
                 C=0.01,
-                penalty="l2",
                 solver="liblinear",
                 max_iter=500,
                 random_state=self.random_state,
@@ -121,11 +125,10 @@ class AdvancedHeartModels:
                 ),
                 (
                     "svm",
-                    SVC(
-                        C=1.0,
-                        kernel="rbf",
-                        probability=True,
-                        random_state=self.random_state,
+                    CalibratedClassifierCV(
+                        SVC(C=1.0, kernel="rbf", random_state=self.random_state),
+                        method="sigmoid",
+                        cv=3,
                     ),
                 ),
             ],
