@@ -41,10 +41,19 @@ IEEE Access 2025 classification stack (VGG-16 Softmax, VGG-16 + Random Forest, R
 \mathrm{mAP}_{50} = \frac{1}{C}\sum_{c=1}^{C}\mathrm{AP}_{c}\quad(\mathrm{IoU}=0.50)
 \]
 
-## Quick start
+## Quick start (dataset included)
 
 ```bash
 pip install -r requirements.txt
+python data/install_offline_dataset.py   # unpacks 4,083 FracAtlas X-rays already in the repo (no Kaggle, no extra download)
+python main.py web --port 5000
+```
+
+GitHub cannot store the 15 GB GRAZPEDWRI-DX image pack (100 MB file cap). FracAtlas **is** in this repo as `data/offline_bundles/FracAtlas.zip.part00` … `part04` (~323 MB). After clone, the install script joins the parts locally. Details: [`data/DATASETS.md`](data/DATASETS.md).
+
+Without unpacking FracAtlas you can still run a tiny demo:
+
+```bash
 python main.py sample-data          # tiny synthetic 10-class folders so the pipeline runs
 python main.py evaluate             # metric engine demo (ROC + GFLOPs JSON)
 python main.py web --port 5000

@@ -5,7 +5,7 @@
   <div>
     <p class="eyebrow">Data governance</p>
     <h1>Dataset inventory</h1>
-    <p class="lede">Cross-check that every public source is still online, that the GRAZPEDWRI-DX manifest has 20,327 studies, and that local image folders match the IEEE 10-class table. Images themselves are downloaded separately (see commands below).</p>
+    <p class="lede">FracAtlas (4,083 real X-rays) is already in this project as split zip parts. Run <code>python data/install_offline_dataset.py</code> — no Kaggle login. The 10-class Kaggle set and the 15 GB GRAZ image pack still need their own accounts/downloads.</p>
   </div>
   <form method="post" action="{{ url_for('datasets_probe') }}">
     <button class="btn primary" type="submit">Re-probe live URLs</button>
@@ -64,15 +64,18 @@
 </section>
 
 <section class="panel">
-  <h2>Download commands</h2>
+  <h2>Install the bundled dataset (no Kaggle)</h2>
+  <pre class="code-block">python data/install_offline_dataset.py
+# Joins data/offline_bundles/FracAtlas.zip.part00–part04
+# Extracts 4,083 X-rays into data/fracatlas, data/classification, data/yolo</pre>
+  <h2>Optional extra downloads (need Kaggle or 15 GB disk)</h2>
   <pre class="code-block">pip install kaggle
 # Token: kaggle.com/settings → Create New Token → ~/.kaggle/kaggle.json
 
 python data/audit_datasets.py --probe
 python data/audit_datasets.py --download bone_break_classification
 python data/audit_datasets.py --download bonefracture_yolo8
-python data/audit_datasets.py --download fracatlas
-# ~16 GB wrist images for true 20k training:
+# GRAZPEDWRI-DX images are ~15 GB — CSV only is already in data/manifests/:
 python data/audit_datasets.py --download grazpedwri_dx</pre>
 </section>
 {% endblock %}

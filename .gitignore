@@ -26,6 +26,16 @@ data/classification/train/**
 data/classification/val/**
 !data/classification/val/.gitkeep
 data/raw/
+data/fracatlas/
+data/offline_bundles/FracAtlas.zip
+data/yolo/images/train/**
+!data/yolo/images/train/.gitkeep
+data/yolo/images/val/**
+!data/yolo/images/val/.gitkeep
+data/yolo/labels/train/**
+!data/yolo/labels/train/.gitkeep
+data/yolo/labels/val/**
+!data/yolo/labels/val/.gitkeep
 
 *.h5
 *.pt

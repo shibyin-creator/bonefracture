@@ -1,6 +1,23 @@
 # Datasets — how to get, show, and cross-check
 
-Images are **not** stored in git (the 20k wrist set alone is ~15 GB). This folder keeps the **catalog**, a **20,327-row GRAZPEDWRI-DX manifest**, and an auditor that proves each public source is still online.
+## Offline (no Kaggle, no extra download)
+
+This clone **already contains the full FracAtlas archive** (4,083 real X-rays, CC BY 4.0), split into GitHub-safe 80 MB parts:
+
+```bash
+python data/install_offline_dataset.py
+```
+
+That command only concatenates local files (no internet). You get:
+
+| Installed | Count |
+| --- | ---: |
+| FracAtlas X-rays (`data/fracatlas/`) | **4,083** |
+| Fractured / Non-fractured ImageFolder | 719 / 3,366 |
+| YOLO boxes (`data/yolo/` + `fracatlas.yaml`) | **719** labelled fractures |
+| 10-class morphology demo (`data/bundled_morphology/`) | synthetic IEEE class folders so Softmax/RF can train without Kaggle |
+
+**Why not GRAZPEDWRI-DX images in git?** That set is **~15 GB**. GitHub rejects files over 100 MB and cannot host 15 GB. The **20,327-row CSV** is in `data/manifests/grazpedwri_dataset.csv`. The IEEE **1,129-image 10-class Kaggle set** also needs a Kaggle login we cannot bypass; use the bundled morphology demo plus FracAtlas until you can access Kaggle.
 
 ## Honest scale
 
