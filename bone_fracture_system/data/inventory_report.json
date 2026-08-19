@@ -1,0 +1,148 @@
+{
+  "generated_at": "2026-08-16T19:07:52+00:00",
+  "probed": true,
+  "scale_up_math": {
+    "paper_morphology_images": 1129,
+    "abstract_yolo_images": 3715,
+    "fracatlas_images": 4083,
+    "grazpedwri_dx_images": 20327,
+    "combined_unique_estimate": 28000,
+    "explanation": "The IEEE 10-class set is only ~1,129 images. 20,000+ scale comes from GRAZPEDWRI-DX (20,327 pediatric wrist trauma radiographs) plus FracAtlas and the YOLO anatomical set. Do not claim 20k images of all 10 morphology classes unless you relabel GRAZ/FracAtlas."
+  },
+  "remotes": [
+    {
+      "id": "bone_break_classification",
+      "url": "https://www.kaggle.com/datasets/pkdarabi/bone-break-classification-image-dataset",
+      "ok": true,
+      "detail": "reachable",
+      "http_status": 200,
+      "title": "Bone Break Classification Image Dataset",
+      "downloads": 8599,
+      "votes": 95
+    },
+    {
+      "id": "bonefracture_yolo8",
+      "url": "https://www.kaggle.com/datasets/pkdarabi/bone-fracture-detection-computer-vision-project",
+      "ok": true,
+      "detail": "reachable",
+      "http_status": 200,
+      "title": "Bone Fracture Detection: Computer Vision Project",
+      "downloads": 17823,
+      "votes": 208
+    },
+    {
+      "id": "grazpedwri_dx",
+      "url": "https://doi.org/10.6084/m9.figshare.14825193",
+      "ok": true,
+      "detail": "reachable",
+      "http_status": 200,
+      "title": "GRAZPEDWRI-DX",
+      "n_files": 6,
+      "license": "CC BY 4.0"
+    },
+    {
+      "id": "fracatlas",
+      "url": "https://doi.org/10.6084/m9.figshare.22363012",
+      "ok": true,
+      "detail": "reachable",
+      "http_status": 200,
+      "title": "FracAtlas: A Dataset for Fracture Classification, Localization and Segmentation of Musculoskeletal Radiographs",
+      "n_files": 1,
+      "license": "CC BY 4.0"
+    }
+  ],
+  "local": {
+    "classification_train": {},
+    "classification_val": {},
+    "classification_train_total": 0,
+    "classification_val_total": 0,
+    "yolo_images": 0,
+    "yolo_labels": 0,
+    "graz": {
+      "present": true,
+      "n_rows": 20327,
+      "expected": 20327,
+      "match": true,
+      "fracture_visible": {
+        "": 6777,
+        "1": 13550
+      },
+      "gender": {
+        "M": 12040,
+        "F": 8285,
+        "O": 2
+      },
+      "path": "data/manifests/grazpedwri_dataset.csv"
+    },
+    "fracatlas_images": 0
+  },
+  "morphology_checklist": [
+    {
+      "class": "Avulsion Fracture",
+      "expected": 123,
+      "local": 0,
+      "status": "missing"
+    },
+    {
+      "class": "Comminuted Fracture",
+      "expected": 148,
+      "local": 0,
+      "status": "missing"
+    },
+    {
+      "class": "Fracture-Dislocation",
+      "expected": 156,
+      "local": 0,
+      "status": "missing"
+    },
+    {
+      "class": "Greenstick Fracture",
+      "expected": 122,
+      "local": 0,
+      "status": "missing"
+    },
+    {
+      "class": "Hairline Fracture",
+      "expected": 111,
+      "local": 0,
+      "status": "missing"
+    },
+    {
+      "class": "Impacted Fracture",
+      "expected": 84,
+      "local": 0,
+      "status": "missing"
+    },
+    {
+      "class": "Longitudinal Fracture",
+      "expected": 80,
+      "local": 0,
+      "status": "missing"
+    },
+    {
+      "class": "Oblique Fracture",
+      "expected": 85,
+      "local": 0,
+      "status": "missing"
+    },
+    {
+      "class": "Pathological Fracture",
+      "expected": 134,
+      "local": 0,
+      "status": "missing"
+    },
+    {
+      "class": "Spiral Fracture",
+      "expected": 86,
+      "local": 0,
+      "status": "missing"
+    }
+  ],
+  "how_to_download": {
+    "kaggle_token": "https://www.kaggle.com/settings \u2192 API \u2192 Create New Token \u2192 ~/.kaggle/kaggle.json",
+    "paper_10_class": "kaggle datasets download -d pkdarabi/bone-break-classification-image-dataset -p data/raw --unzip",
+    "abstract_yolo": "kaggle datasets download -d pkdarabi/bone-fracture-detection-computer-vision-project -p data/raw --unzip",
+    "graz_20k_images": "kaggle datasets download -d jasonroggy/grazpedwri-dx -p data/raw  # ~16 GB",
+    "fracatlas": "python data/audit_datasets.py --download fracatlas"
+  }
+}

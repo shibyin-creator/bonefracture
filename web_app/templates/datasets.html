@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Datasets · FractureNet{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Data governance</p>
+    <h1>Dataset inventory</h1>
+    <p class="lede">FracAtlas (4,083 real X-rays) is already in this project as split zip parts. Run <code>python data/install_offline_dataset.py</code> — no Kaggle login. The 10-class Kaggle set and the 15 GB GRAZ image pack still need their own accounts/downloads.</p>
+  </div>
+  <form method="post" action="{{ url_for('datasets_probe') }}">
+    <button class="btn primary" type="submit">Re-probe live URLs</button>
+  </form>
+</header>
+
+<section class="kpi-row">
+  <article class="kpi"><span>Paper 10-class</span><strong>1,129</strong></article>
+  <article class="kpi"><span>YOLO abstract</span><strong>3,316 / 399</strong></article>
+  <article class="kpi"><span>GRAZPEDWRI-DX</span><strong>{{ graz_rows }}</strong></article>
+  <article class="kpi {% if graz_ok %}{% else %}warn{% endif %}"><span>20k manifest match</span><strong>{% if graz_ok %}yes{% else %}no{% endif %}</strong></article>
+</section>
+
+<section class="panel">
+  <h2>How 20k-scale is obtained</h2>
+  <p class="lede">The IEEE morphology set is only 1,129 X-rays. Twenty-thousand scale is <strong>GRAZPEDWRI-DX (20,327 wrist trauma radiographs)</strong> plus FracAtlas (4,083) and the YOLO anatomical set (~3.7k). Combined unique estimate ≈ 28,000. That is not 20k labelled examples of every morphology class.</p>
+</section>
+
+<section class="panel">
+  <h2>Remote sources (HTTP check)</h2>
+  <table class="metrics">
+    <thead><tr><th>Source</th><th>Role</th><th>Expected</th><th>Live</th><th>Link</th></tr></thead>
+    <tbody>
+      {% for row in remotes %}
+      <tr>
+        <td>{{ row.id }}</td>
+        <td>{{ row.role }}</td>
+        <td>{{ row.expected }}</td>
+        <td>{% if row.ok %}<span class="pill ok">LIVE</span>{% else %}<span class="pill bad">{{ row.detail or 'not probed' }}</span>{% endif %}</td>
+        <td>{% if row.url %}<a href="{{ row.url }}" target="_blank" rel="noopener">open</a>{% endif %}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5">Click “Re-probe live URLs” (needs outbound HTTPS).</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="fine">Last report: {{ generated_at or 'never' }}</p>
+</section>
+
+<section class="panel">
+  <h2>IEEE 10 morphology classes vs local folders</h2>
+  <table class="metrics">
+    <thead><tr><th>Class</th><th>Paper count</th><th>Local images</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for row in checklist %}
+      <tr>
+        <td>{{ row.class }}</td>
+        <td>{{ row.expected }}</td>
+        <td>{{ row.local }}</td>
+        <td><span class="pill {{ row.status }}">{{ row.status }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="fine">Local train={{ local.classification_train_total }} · val={{ local.classification_val_total }} · YOLO images={{ local.yolo_images }} · YOLO labels={{ local.yolo_labels }}</p>
+</section>
+
+<section class="panel">
+  <h2>Install the bundled dataset (no Kaggle)</h2>
+  <pre class="code-block">python data/install_offline_dataset.py
+# Joins data/offline_bundles/FracAtlas.zip.part00–part04
+# Extracts 4,083 X-rays into data/fracatlas, data/classification, data/yolo</pre>
+  <h2>Optional extra downloads (need Kaggle or 15 GB disk)</h2>
+  <pre class="code-block">pip install kaggle
+# Token: kaggle.com/settings → Create New Token → ~/.kaggle/kaggle.json
+
+python data/audit_datasets.py --probe
+python data/audit_datasets.py --download bone_break_classification
+python data/audit_datasets.py --download bonefracture_yolo8
+# GRAZPEDWRI-DX images are ~15 GB — CSV only is already in data/manifests/:
+python data/audit_datasets.py --download grazpedwri_dx</pre>
+</section>
+{% endblock %}

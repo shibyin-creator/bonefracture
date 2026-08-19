@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Administration · FractureNet{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Governance</p>
+    <h1>Admin panel</h1>
+    <p class="lede">User management, model weight status, published metrics, and audit logs.</p>
+  </div>
+  <article class="kpi"><span>Stored studies</span><strong>{{ study_count }}</strong></article>
+</header>
+
+<section class="grid-2">
+  <article class="panel">
+    <h2>Create clinician account</h2>
+    <form id="userForm" class="stack-form">
+      <label>Username <input name="username" required /></label>
+      <label>Full name <input name="full_name" /></label>
+      <label>Password <input name="password" type="password" required /></label>
+      <label>Role
+        <select name="role">
+          <option value="clinician">Clinician</option>
+          <option value="radiologist">Radiologist</option>
+          <option value="admin">Admin</option>
+        </select>
+      </label>
+      <button class="btn primary" type="submit">Add user</button>
+      <p id="userStatus" class="status" hidden></p>
+    </form>
+  </article>
+  <article class="panel">
+    <h2>Weight registry</h2>
+    <table class="metrics">
+      <thead><tr><th>Artifact</th><th>Present</th></tr></thead>
+      <tbody>
+        {% for name, present in weight_status.items() %}
+        <tr><td>{{ name }}</td><td>{% if present %}yes{% else %}pending{% endif %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="fine">Place trained files in <code>weights/</code> or run the Colab / local training scripts.</p>
+  </article>
+</section>
+
+<section class="panel">
+  <h2>Users</h2>
+  <table class="metrics" id="userTable">
+    <thead><tr><th>ID</th><th>Username</th><th>Name</th><th>Role</th><th>Active</th><th>Last login</th><th></th></tr></thead>
+    <tbody>
+      {% for u in users %}
+      <tr data-id="{{ u.id }}">
+        <td>{{ u.id }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.full_name }}</td>
+        <td>{{ u.role }}</td>
+        <td>{{ 'yes' if u.is_active else 'no' }}</td>
+        <td>{{ u.last_login or '—' }}</td>
+        <td>
+          {% if u.username != 'admin' %}
+          <button class="btn danger sm" type="button" data-deactivate="{{ u.id }}">Deactivate</button>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="panel">
+  <h2>Audit log</h2>
+  <table class="metrics">
+    <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Details</th><th>IP</th></tr></thead>
+    <tbody>
+      {% for log in logs %}
+      <tr>
+        <td>{{ log.created_at }}</td>
+        <td>{{ log.username }}</td>
+        <td>{{ log.action }}</td>
+        <td>{{ log.details }}</td>
+        <td>{{ log.ip_address }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5">No audit events.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById("userForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const body = Object.fromEntries(new FormData(form).entries());
+  const status = document.getElementById("userStatus");
+  status.hidden = false;
+  const res = await fetch("{{ url_for('api_users') }}", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  status.textContent = res.ok ? `Created user #${data.id}` : (data.error || "Failed");
+  if (res.ok) window.location.reload();
+});
+document.querySelectorAll("[data-deactivate]").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    if (!confirm("Deactivate this account?")) return;
+    await fetch(`/api/users/${btn.dataset.deactivate}`, { method: "DELETE" });
+    window.location.reload();
+  });
+});
+</script>
+{% endblock %}

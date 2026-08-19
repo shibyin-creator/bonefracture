@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Bone Fracture Intelligence{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/medical_theme.css') }}" />
+  {% block head %}{% endblock %}
+</head>
+<body>
+  {% if current_user %}
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">BF</span>
+      <div>
+        <strong>FractureNet</strong>
+        <small>Clinical imaging suite</small>
+      </div>
+    </div>
+    <nav>
+      <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">Clinical portal</a>
+      <a href="{{ url_for('coverage_page') }}" class="{% if request.endpoint == 'coverage_page' %}active{% endif %}">Body coverage</a>
+      <a href="{{ url_for('datasets_page') }}" class="{% if request.endpoint == 'datasets_page' %}active{% endif %}">Datasets</a>
+      {% if current_user.role == 'admin' %}
+      <a href="{{ url_for('admin_panel') }}" class="{% if request.endpoint == 'admin_panel' %}active{% endif %}">Admin</a>
+      {% endif %}
+      <a href="{{ url_for('logout') }}">Sign out</a>
+    </nav>
+    <div class="sidebar-foot">
+      <span>{{ current_user.full_name or current_user.username }}</span>
+      <em>{{ current_user.role }}</em>
+    </div>
+  </aside>
+  {% endif %}
+  <main class="{% if current_user %}with-sidebar{% endif %}">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-stack">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+    <p class="fine" style="margin: 24px 0 8px;">Research &amp; Diagnostic Support Tool Only — Not an Authorized Medical Device. Outputs require licensed clinical review.</p>
+  </main>
+  <button id="themeToggle" class="theme-fab" type="button" aria-label="Toggle dark mode">◐</button>
+  <script>
+    const root = document.documentElement;
+    const saved = localStorage.getItem("bf-theme");
+    if (saved) root.setAttribute("data-theme", saved);
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("bf-theme", next);
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

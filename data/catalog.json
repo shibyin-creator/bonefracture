@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "notes": "Public sources used by this project. Images are NOT stored in git (too large). Run data/audit_datasets.py to probe URLs and count local files.",
+  "scale_up_math": {
+    "paper_morphology_images": 1129,
+    "abstract_yolo_images": 3715,
+    "fracatlas_images": 4083,
+    "grazpedwri_dx_images": 20327,
+    "combined_unique_estimate": 28000,
+    "explanation": "The IEEE 10-class set is only ~1,129 images. 20,000+ scale comes from GRAZPEDWRI-DX (20,327 pediatric wrist trauma radiographs) plus FracAtlas and the YOLO anatomical set. Do not claim 20k images of all 10 morphology classes unless you relabel GRAZ/FracAtlas."
+  },
+  "sources": [
+    {
+      "id": "bone_break_classification",
+      "role": "IEEE paper morphology classifier (10 classes)",
+      "expected_images": 1129,
+      "expected_train": 989,
+      "expected_test": 140,
+      "license": "Check Kaggle dataset page (Roboflow-derived)",
+      "kaggle": "pkdarabi/bone-break-classification-image-dataset",
+      "url": "https://www.kaggle.com/datasets/pkdarabi/bone-break-classification-image-dataset",
+      "probe": "https://www.kaggle.com/api/v1/datasets/metadata/pkdarabi/bone-break-classification-image-dataset",
+      "local_dir": "classification",
+      "classes": [
+        "Avulsion Fracture",
+        "Comminuted Fracture",
+        "Fracture-Dislocation",
+        "Greenstick Fracture",
+        "Hairline Fracture",
+        "Impacted Fracture",
+        "Longitudinal Fracture",
+        "Oblique Fracture",
+        "Pathological Fracture",
+        "Spiral Fracture"
+      ],
+      "class_counts_paper": {
+        "Avulsion Fracture": 123,
+        "Comminuted Fracture": 148,
+        "Fracture-Dislocation": 156,
+        "Greenstick Fracture": 122,
+        "Hairline Fracture": 111,
+        "Impacted Fracture": 84,
+        "Longitudinal Fracture": 80,
+        "Oblique Fracture": 85,
+        "Pathological Fracture": 134,
+        "Spiral Fracture": 86
+      }
+    },
+    {
+      "id": "bonefracture_yolo8",
+      "role": "Project abstract YOLOv8 detector (anatomical boxes)",
+      "expected_images": 3715,
+      "expected_train": 3316,
+      "expected_val": 399,
+      "notes": "Kaggle listing reports ~4,148 images depending on version; abstract used 3,316 / 399.",
+      "license": "Check Kaggle dataset page (YOLO labels)",
+      "kaggle": "pkdarabi/bone-fracture-detection-computer-vision-project",
+      "url": "https://www.kaggle.com/datasets/pkdarabi/bone-fracture-detection-computer-vision-project",
+      "probe": "https://www.kaggle.com/api/v1/datasets/metadata/pkdarabi/bone-fracture-detection-computer-vision-project",
+      "local_dir": "yolo",
+      "classes": [
+        "Elbow Positive",
+        "Fingers Positive",
+        "Forearm Fracture",
+        "Humerus",
+        "Humerus Fracture",
+        "Shoulder Fracture",
+        "Wrist Positive"
+      ]
+    },
+    {
+      "id": "grazpedwri_dx",
+      "role": "20k-scale wrist trauma radiographs (Scientific Data 2022)",
+      "expected_images": 20327,
+      "license": "CC BY 4.0",
+      "url": "https://doi.org/10.6084/m9.figshare.14825193",
+      "figshare_article": 14825193,
+      "kaggle": "jasonroggy/grazpedwri-dx",
+      "kaggle_url": "https://www.kaggle.com/datasets/jasonroggy/grazpedwri-dx",
+      "probe": "https://api.figshare.com/v2/articles/14825193",
+      "manifest": "manifests/grazpedwri_dataset.csv",
+      "size_gb": 15.2,
+      "local_dir": "grazpedwri",
+      "classes": ["Wrist Positive", "fracture", "metal", "periostealreaction", "pronatorsign", "softtissue", "boneanomaly", "bonelesion", "foreignbody"]
+    },
+    {
+      "id": "fracatlas",
+      "role": "Extra multi-region X-rays with YOLO/COCO/VOC boxes (4,083 images)",
+      "expected_images": 4083,
+      "license": "CC BY 4.0",
+      "url": "https://doi.org/10.6084/m9.figshare.22363012",
+      "figshare_article": 22363012,
+      "huggingface": "yh0701/FracAtlas_dataset",
+      "probe": "https://api.figshare.com/v2/articles/22363012",
+      "local_dir": "fracatlas",
+      "size_mb": 323
+    }
+  ]
+}

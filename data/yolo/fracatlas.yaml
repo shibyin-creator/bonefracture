@@ -1,0 +1,7 @@
+# FracAtlas fracture vs background (installed offline)
+# Run: python data/install_offline_dataset.py
+path: .
+train: images/train
+val: images/val
+names:
+  0: Fracture

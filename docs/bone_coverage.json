@@ -1,0 +1,116 @@
+{
+  "adult_skeleton_bones": 206,
+  "project_does_not_claim": "Classification of every one of the 206 named bones.",
+  "headline_for_viva": "10 morphological fracture types across 11 skeletal regions, covering the bones that produce the large majority of trauma radiographs — not the entire 206-bone skeleton.",
+  "morphology_classes": 10,
+  "primary_regions": 11,
+  "named_bones_in_scope": 42,
+  "regions": [
+    {
+      "region": "Shoulder girdle",
+      "detector_labels": ["Shoulder", "Shoulder Fracture"],
+      "bones": ["Clavicle", "Scapula", "Proximal humerus (head, neck, greater/lesser tuberosity)"],
+      "typical_views": ["AP", "lateral scapula / Y-view", "axillary"],
+      "benchmark_data": "YOLOv8 abstract class: Shoulder Fracture"
+    },
+    {
+      "region": "Arm (humerus)",
+      "detector_labels": ["Humerus", "Humerus Fracture"],
+      "bones": ["Humeral shaft", "Distal humerus (supracondylar region)"],
+      "typical_views": ["AP", "lateral"],
+      "benchmark_data": "YOLOv8 abstract classes: Humerus, Humerus Fracture"
+    },
+    {
+      "region": "Elbow",
+      "detector_labels": ["Elbow", "Elbow Positive"],
+      "bones": ["Distal humerus", "Radial head / neck", "Proximal ulna (olecranon, coronoid)"],
+      "typical_views": ["AP", "lateral"],
+      "benchmark_data": "YOLOv8 abstract class: Elbow Positive"
+    },
+    {
+      "region": "Forearm",
+      "detector_labels": ["Forearm", "Forearm Fracture"],
+      "bones": ["Radius (shaft)", "Ulna (shaft)"],
+      "typical_views": ["AP", "lateral"],
+      "benchmark_data": "YOLOv8 abstract class: Forearm Fracture"
+    },
+    {
+      "region": "Wrist",
+      "detector_labels": ["Wrist", "Wrist Positive"],
+      "bones": ["Distal radius", "Distal ulna / ulnar styloid", "Scaphoid", "Lunate", "Other carpals (as a group)"],
+      "typical_views": ["PA", "lateral", "scaphoid view"],
+      "benchmark_data": "YOLOv8 Wrist Positive + GRAZPEDWRI-DX 20,327 pediatric wrist images"
+    },
+    {
+      "region": "Hand / fingers",
+      "detector_labels": ["Fingers", "Fingers Positive"],
+      "bones": ["Metacarpals (1–5)", "Proximal phalanges", "Middle phalanges", "Distal phalanges"],
+      "typical_views": ["PA", "oblique", "lateral"],
+      "benchmark_data": "YOLOv8 abstract class: Fingers Positive"
+    },
+    {
+      "region": "Pelvis",
+      "detector_labels": ["Pelvic Fracture"],
+      "bones": ["Ilium", "Ischium", "Pubis", "Sacrum (pelvic ring)", "Acetabulum (as pelvic injury)"],
+      "typical_views": ["AP pelvis", "inlet / outlet (clinical, not required by app)"],
+      "benchmark_data": "Taxonomy + FracAtlas multi-region X-rays; not a dedicated 7-class YOLO label in the abstract split"
+    },
+    {
+      "region": "Thigh",
+      "detector_labels": ["Femur"],
+      "bones": ["Femoral neck", "Intertrochanteric region", "Femoral shaft", "Distal femur"],
+      "typical_views": ["AP", "lateral"],
+      "benchmark_data": "Software region for scale-up; train from FracAtlas / hospital PACS — not in the 7-class abstract YOLO set"
+    },
+    {
+      "region": "Knee",
+      "detector_labels": ["Knee"],
+      "bones": ["Distal femur", "Patella", "Proximal tibia (plateau)", "Proximal fibula"],
+      "typical_views": ["AP", "lateral", "sunrise (patella)"],
+      "benchmark_data": "Software region for scale-up / FracAtlas"
+    },
+    {
+      "region": "Ankle / hindfoot",
+      "detector_labels": ["Ankle"],
+      "bones": ["Distal tibia (plafond / malleoli)", "Distal fibula (lateral malleolus)", "Talus"],
+      "typical_views": ["AP", "mortise", "lateral"],
+      "benchmark_data": "Software region for scale-up / FracAtlas"
+    },
+    {
+      "region": "Spine",
+      "detector_labels": ["Spine"],
+      "bones": ["Cervical vertebrae (C1–C7 as a group)", "Thoracic vertebrae (T1–T12 as a group)", "Lumbar vertebrae (L1–L5 as a group)"],
+      "typical_views": ["AP", "lateral"],
+      "benchmark_data": "Software region for scale-up; vertebrae are grouped, not 24 separate classes"
+    }
+  ],
+  "morphology": [
+    {"name": "Avulsion Fracture", "plain": "A ligament or tendon pulls a bone fragment off.", "common_bones": "Malleoli, phalanges, pelvic apophyses, tibial tubercle"},
+    {"name": "Comminuted Fracture", "plain": "Bone broken into three or more pieces.", "common_bones": "Tibia, femur, humerus, calcaneus after high energy"},
+    {"name": "Fracture-Dislocation", "plain": "Break plus the joint is out of place.", "common_bones": "Ankle, elbow, shoulder, wrist, hip"},
+    {"name": "Greenstick Fracture", "plain": "Incomplete break in a flexible (usually paediatric) bone.", "common_bones": "Paediatric radius/ulna, clavicle"},
+    {"name": "Hairline Fracture", "plain": "Very thin crack; easy to miss on X-ray.", "common_bones": "Tibia, metatarsals, scaphoid"},
+    {"name": "Impacted Fracture", "plain": "Fragments are driven into each other.", "common_bones": "Proximal humerus, femoral neck, distal radius"},
+    {"name": "Longitudinal Fracture", "plain": "Crack runs along the long axis of the bone.", "common_bones": "Long-bone shafts (tibia, femur, metacarpal)"},
+    {"name": "Oblique Fracture", "plain": "Diagonal break across the shaft.", "common_bones": "Tibia, femur, humerus, forearm"},
+    {"name": "Pathological Fracture", "plain": "Break through bone weakened by disease (tumour, osteoporosis, cyst).", "common_bones": "Vertebra, proximal femur, humerus"},
+    {"name": "Spiral Fracture", "plain": "Helical break from a twisting force.", "common_bones": "Tibia, humerus, femur, paediatric tibia"}
+  ],
+  "out_of_scope_unless_retrained": [
+    "Skull and facial bones",
+    "Ribs and sternum",
+    "Scapular blade in isolation as its own class (folded into Shoulder)",
+    "Individual carpal bones as 8 separate classes (folded into Wrist)",
+    "Foot (metatarsals, midfoot, phalanges) as dedicated classes",
+    "Mandible, hyoid, sesamoids as dedicated classes"
+  ],
+  "data_readiness": {
+    "ready_to_demo_with_published_splits": {
+      "morphology_10_class_kaggle": 1129,
+      "yolo_upper_limb_abstract": {"train": 3316, "val": 399, "classes": 7},
+      "grazpedwri_dx_wrist": 20327,
+      "fracatlas_mixed": 4083
+    },
+    "requires_extra_labelled_images": ["Femur", "Knee", "Ankle", "Spine", "Pelvis (dedicated detector)"]
+  }
+}

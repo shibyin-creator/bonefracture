@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Secure Access · FractureNet</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/medical_theme.css') }}" />
+</head>
+<body class="auth-body">
+  <section class="login-card">
+    <div class="login-hero">
+      <span class="brand-mark lg">BF</span>
+      <h1>Medical Image Analysis for Bone Fracture Detection</h1>
+      <p>YOLOv8 localization · VGG-16 / Random Forest classification · Grad-CAM explainability · surgical refixation simulation</p>
+      <ul class="login-metrics">
+        <li><strong>95%</strong> VGG-16 / VGG-16+RF accuracy</li>
+        <li><strong>86%</strong> YOLOv8 mAP50</li>
+        <li><strong>18</strong> morphology + anatomical classes</li>
+      </ul>
+    </div>
+    <form class="login-form" method="post" autocomplete="on">
+      <h2>Clinician / Admin sign-in</h2>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+      <label>Username
+        <input type="text" name="username" required autofocus />
+      </label>
+      <label>Password
+        <input type="password" name="password" required />
+      </label>
+      <button type="submit" class="btn primary">Enter dashboard</button>
+      <p class="hint">Default bootstrap account: <code>admin</code> / <code>Admin@123</code> — change immediately in production.</p>
+    </form>
+  </section>
+  <button id="themeToggle" class="theme-fab" type="button">◐</button>
+  <script>
+    const root = document.documentElement;
+    const saved = localStorage.getItem("bf-theme");
+    if (saved) root.setAttribute("data-theme", saved);
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("bf-theme", next);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# YOLOv8 fracture detection dataset (Ultralytics format)
+# Fill images/ and labels/ then train:  python models/train_yolov8.py
+path: .
+train: images/train
+val: images/val
+
+names:
+  0: Elbow Positive
+  1: Fingers Positive
+  2: Forearm Fracture
+  3: Humerus
+  4: Humerus Fracture
+  5: Shoulder Fracture
+  6: Wrist Positive
+  7: Pelvic Fracture
+  8: Femur
+  9: Knee
+  10: Ankle
+  11: Spine
+  12: Avulsion Fracture
+  13: Comminuted Fracture
+  14: Fracture-Dislocation
+  15: Greenstick Fracture
+  16: Hairline Fracture
+  17: Impacted Fracture
+  18: Longitudinal Fracture
+  19: Oblique Fracture
+  20: Pathological Fracture
+  21: Spiral Fracture
