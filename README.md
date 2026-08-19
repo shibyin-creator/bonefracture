@@ -84,6 +84,14 @@ Accuracy, Precision, Recall, F1-score, MCC, PR-AUC, ROC-AUC, plus confusion matr
 
 This software is a **university research prototype**. It is not a medical device, does not provide diagnosis, and must not be used as a substitute for licensed clinical judgment. Synthetic ECG traces are pedagogical visualizations derived from interval parameters, not recorded electrograms.
 
+## Presentation documentation
+
+All viva/demo materials are in [`docs/`](docs/README.md):
+
+- Browser slides: open [`docs/presentation.html`](docs/presentation.html) (arrow keys)
+- Speaker notes, IEEE report, user/admin manual, architecture, demo script, poster
+- Bone/fracture question: **this system tests 0 bones** — see [`docs/08_BONE_FRACTURE_SCOPE.md`](docs/08_BONE_FRACTURE_SCOPE.md)
+
 ## License / course use
 
 Prepared for academic submission. Cite the SPIN 2024 paper and the UCI Heart Failure Clinical Records dataset (Ahmad et al., 2017; Chicco & Jurman, 2020).
